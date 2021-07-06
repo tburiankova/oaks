@@ -15,3 +15,11 @@ export const classes = (
       typeof classString === 'string' ? classString : classString.join(' ')
    }${classesList.length && classString ? ' ' : ''}${classesList.join(' ')}`;
 };
+
+export const createArray = (arrayLength: number) => {
+   const newArray = [];
+   for (let i = 0; i < arrayLength; i++) {
+      newArray.push(i);
+   }
+   return newArray;
+};

@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Checkbox from './components/Checkbox';
+import { classes, createArray } from './services/utils';
+import { IRandomFact } from './services/types';
 import style from './App.module.scss';
-import { classes } from './services/utils';
 
 function App() {
+   console.log('mounted');
    const [state, setState] = useState(
       JSON.parse(localStorage.getItem('progress')) ||
          progressData.reduce((acc, val) => {
@@ -14,6 +16,34 @@ function App() {
             return acc;
          }, {}),
    );
+   const [completed, setCompleted] = useState(
+      progressData.reduce((acc, val) => {
+         acc[val.name] = false;
+         return acc;
+      }, {}),
+   );
+   const [randomFact, setRandomFact] = useState<IRandomFact>(undefined);
+
+   useEffect(() => {
+      Object.keys(state).forEach((phase) => {
+         if (
+            Object.keys(state[phase]).every((step) => state[phase][step].value)
+         ) {
+            setCompleted((prev) => ({ ...prev, [phase]: true }));
+         } else {
+            setCompleted((prev) => ({ ...prev, [phase]: false }));
+         }
+      });
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, [state]);
+
+   useEffect(() => {
+      if (Object.keys(completed).every((phase) => completed[phase])) {
+         fetch('https://uselessfacts.jsph.pl/random.json')
+            .then((res) => res.json())
+            .then((data) => setRandomFact(data));
+      }
+   }, [completed]);
 
    const handleChange = (phase: string, stepId: number) => {
       const newState = {
@@ -35,25 +65,21 @@ function App() {
          <div className={style.container}>
             <h1>My startup progress</h1>
 
-            {/* <pre>{JSON.stringify(state, null, 2)}</pre> */}
-
             <div className={style.inner}>
                {progressData.map(({ id, name, steps }, i) => {
-                  const prevPhase = i === 0 ? null : progressData[i - 1].name;
-                  const unlocked = prevPhase
-                     ? Object.keys(state[prevPhase]).every(
-                          (step) => state[prevPhase][step].value,
-                       )
-                     : true;
-                  const isComplete = Object.keys(state[name]).every(
-                     (step) => state[name][step].value,
-                  );
+                  let unlocked = true;
+                  if (i > 0) {
+                     createArray(i).forEach((val) => {
+                        if (!completed[progressData[val].name])
+                           unlocked = false;
+                     });
+                  }
 
                   return (
                      <div
                         key={id}
                         className={classes(style.progress, {
-                           [style['is-complete']]: isComplete,
+                           [style['is-complete']]: completed[name] && unlocked,
                         })}
                      >
                         <h2>
@@ -77,6 +103,12 @@ function App() {
                      </div>
                   );
                })}
+               {randomFact && (
+                  <div>
+                     <h3>Bonus for completing all stages:</h3>
+                     <p>Random fact: {randomFact.text}</p>
+                  </div>
+               )}
             </div>
          </div>
       </div>
