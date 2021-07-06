@@ -5,17 +5,18 @@ import { classes } from './services/utils';
 
 function App() {
    const [state, setState] = useState(
-      progressData.reduce((acc, val) => {
-         acc[val.name] = val.steps.reduce((acc2, val2) => {
-            acc2[val2.id] = { ...val2, value: false };
-            return acc2;
-         }, {});
-         return acc;
-      }, {}),
+      JSON.parse(localStorage.getItem('progress')) ||
+         progressData.reduce((acc, val) => {
+            acc[val.name] = val.steps.reduce((acc2, val2) => {
+               acc2[val2.id] = { ...val2, value: false };
+               return acc2;
+            }, {});
+            return acc;
+         }, {}),
    );
 
    const handleChange = (phase: string, stepId: number) => {
-      setState({
+      const newState = {
          ...state,
          [phase]: {
             ...state[phase],
@@ -24,7 +25,9 @@ function App() {
                value: !state[phase][stepId].value,
             },
          },
-      });
+      };
+      setState(newState);
+      localStorage.setItem('progress', JSON.stringify(newState));
    };
 
    return (
