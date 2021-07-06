@@ -2,3 +2,35 @@ $white: #fff;
 $black: #1b1b1b;
 $grey: #f1f1f1;
 $primary-color: #424dab;
+
+$box-shadow: 0px 16px 32px rgba($black, 0.05);
+
+$breakpoint-small: 0;
+$breakpoint-medium: 640px;
+$breakpoint-large: 1024px;
+
+@mixin large {
+   @media screen and (min-width: #{$breakpoint-large}) {
+      @content;
+   }
+}
+@mixin medium {
+   @media screen and (min-width: #{$breakpoint-medium}) {
+      @content;
+   }
+}
+@mixin medium-only {
+   @media screen and (min-width: #{$breakpoint-medium}) and (max-width: #{$breakpoint-large - 1px}) {
+      @content;
+   }
+}
+@mixin medium-down {
+   @media screen and (max-width: #{$breakpoint-large - 1px}) {
+      @content;
+   }
+}
+@mixin small-only {
+   @media screen and (max-width: #{$breakpoint-medium - 1px}) {
+      @content;
+   }
+}
