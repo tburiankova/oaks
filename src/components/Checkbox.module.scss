@@ -1,0 +1,65 @@
+@import '../styles/settings';
+
+.label {
+   cursor: pointer;
+   display: flex;
+   align-items: center;
+   font-size: 1rem;
+   color: $black;
+   font-weight: 500;
+
+   &.is-disabled {
+      color: $black;
+      pointer-events: none;
+      opacity: 0.5;
+
+      .custom-checkbox {
+         background-color: $white;
+      }
+   }
+
+   p {
+      margin-bottom: 0;
+   }
+
+   a {
+      text-decoration: none;
+      font-weight: 500;
+
+      &:hover {
+         opacity: 0.8;
+      }
+   }
+}
+
+.checkbox {
+   width: 1px;
+   height: 1px;
+   position: absolute;
+   left: -2000px;
+
+   &:checked + .custom-checkbox {
+      border-color: $primary-color;
+      background-color: $primary-color;
+      background-image: url('../assets/icons/ic-check-white.svg');
+      background-repeat: no-repeat;
+      background-position: 55% 50%;
+   }
+
+   &:focus + .custom-checkbox {
+      //   box-shadow: $box-shadow-focus;
+   }
+}
+
+.custom-checkbox {
+   position: relative;
+   flex-shrink: 0;
+   width: 1.25rem;
+   height: 1.25rem;
+   background-color: $white;
+   background-size: 90%;
+   border-radius: 0.25rem;
+   border: 2px solid $grey;
+   margin-right: 0.875rem;
+   transition: background-color 0.2s ease-out, background-size 0.2s, border 0.2s;
+}

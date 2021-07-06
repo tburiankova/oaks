@@ -1,0 +1,23 @@
+@import './settings';
+
+html {
+   box-sizing: border-box;
+   font-size: 100%;
+}
+
+body {
+   margin: 0;
+   padding: 0;
+   background: $grey;
+   font-family: sans-serif;
+   font-weight: 400;
+   color: $black;
+   -webkit-font-smoothing: antialiased;
+   -moz-osx-font-smoothing: grayscale;
+}
+
+*,
+*::before,
+*::after {
+   box-sizing: inherit;
+}
