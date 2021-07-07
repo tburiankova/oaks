@@ -5,7 +5,6 @@ import { IRandomFact } from './services/types';
 import style from './App.module.scss';
 
 function App() {
-   console.log('mounted');
    const [state, setState] = useState(
       JSON.parse(localStorage.getItem('progress')) ||
          progressData.reduce((acc, val) => {
